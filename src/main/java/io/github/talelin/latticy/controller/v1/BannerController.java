@@ -1,6 +1,7 @@
 package io.github.talelin.latticy.controller.v1;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import io.github.talelin.latticy.bo.BannerWithItemsBO;
 import io.github.talelin.latticy.common.mybatis.Page;
 import io.github.talelin.latticy.dto.BannerDTO;
 import io.github.talelin.latticy.mapper.BannerMapper;
@@ -39,6 +40,11 @@ public class BannerController {
         IPage<BannerDO> paging = bannerService.getBaseMapper().selectPage(bannerDOPage, null);
         return new PageResponseVO<BannerDO>(paging.getTotal(), paging.getRecords(), paging.getCurrent(), paging.getSize());
 
+    }
+
+    @GetMapping("/{id}")
+    public BannerWithItemsBO getBanner(@PathVariable @Positive Long id) {
+        return bannerService.getWithItems(id);
     }
 
     @PutMapping("/{id}")
