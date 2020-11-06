@@ -7,9 +7,11 @@ import io.github.talelin.latticy.dto.BannerDTO;
 import io.github.talelin.latticy.mapper.BannerMapper;
 import io.github.talelin.latticy.model.BannerDO;
 import io.github.talelin.latticy.service.BannerService;
+import io.github.talelin.latticy.vo.CreatedVO;
 import io.github.talelin.latticy.vo.DeletedVO;
 import io.github.talelin.latticy.vo.PageResponseVO;
 import io.github.talelin.latticy.vo.UpdatedVO;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -43,7 +45,7 @@ public class BannerController {
     }
 
     @GetMapping("/{id}")
-    public BannerWithItemsBO getBanner(@PathVariable @Positive Long id) {
+    public BannerWithItemsBO read(@PathVariable @Positive Long id) {
         return bannerService.getWithItems(id);
     }
 
@@ -59,5 +61,13 @@ public class BannerController {
     public DeletedVO<BannerDO> delete(@PathVariable @Positive Long id) {
         bannerService.delete(id);
         return new DeletedVO<BannerDO>();
+    }
+
+    @PostMapping
+    public CreatedVO<BannerDO> create(@RequestBody @Validated BannerDTO dto) {
+        BannerDO bannerDO = new BannerDO();
+        BeanUtils.copyProperties(dto, bannerDO);
+        bannerService.save(bannerDO);
+        return new CreatedVO<>();
     }
 }
